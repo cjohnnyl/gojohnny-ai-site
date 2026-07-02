@@ -1,0 +1,91 @@
+# BRIEF — GoJohnny AI (landing page de lista de espera)
+# Gerado pela camada de planejamento (/site-plan) a partir de site-spec.md
+# Gerado em: 2026-07-02
+# Fonte completa (design/UX/copy/SEO/integrações): site-spec.md nesta mesma pasta
+#
+# ATENÇÃO: este projeto NÃO segue o padrão default de agendamento do
+# SDD-MOTOR.md — é uma landing page de captura de lead (lista de espera),
+# sem /admin, sem agendamento. Ver site-spec.md seção 12 antes de construir.
+
+site_slug: "gojohnny-ai"
+nome_negocio: "GoJohnny AI"
+segmento: "coach de corrida com IA via WhatsApp (SaaS B2C, assinatura)"
+descricao_curta: "Seu coach de corrida está no WhatsApp."
+descricao_longa: >
+  GoJohnny AI monta seu plano semanal de corrida com inteligência artificial
+  e manda direto no WhatsApp, toda segunda-feira — sem app, sem humano no
+  loop, com metodologia opinativa e um coach que se adapta à sua rotina, seu
+  histórico e ao tom que você escolher. R$39,90/mês, sem fidelidade.
+
+# Não é lista de serviços agendáveis — representa o único plano de assinatura.
+servicos:
+  - nome: "Plano mensal GoJohnny AI"
+    descricao: "Plano semanal de corrida personalizado por IA via WhatsApp, ajuste por lesão/agenda, suporte via chat, relatório mensal de evolução e escolha do tom do coach."
+    duracao_minutos: null   # não aplicável — assinatura contínua, não sessão
+    preco: "R$39,90/mês"
+
+# Não aplicável — produto 100% remoto, WhatsApp disponível 24/7.
+horario_funcionamento:
+  dias: "Todos os dias"
+  inicio: "00:00"
+  fim: "23:59"
+  obs: "Produto 100% via WhatsApp, sem horário comercial — coach responde a qualquer hora (assíncrono/IA)."
+
+cores:
+  primaria: "#DAFF00"    # amarelo-ácido — CTA, destaque, único acento saturado
+  secundaria: "#0D0D0D"  # preto editorial — fundo dominante alternado
+  fundo: "#F4F2EE"       # off-white — fundo claro alternado
+  texto: "#0D0D0D"       # texto principal sobre fundo claro
+  # paleta completa (incl. --color-muted #6B6B6B, --color-disabled #2A2A2A,
+  # --color-error #FF4D4D) e justificativa de esquema em design-plan.md —
+  # este YAML cobre só os 4 campos tabulares do motor.
+
+contato:
+  whatsapp: ""   # PENDÊNCIA — número oficial do produto ainda não definido/atribuído (ver site-spec.md seção 11: não é CTA do site, é canal pós-cadastro)
+  email: "contato@gojohnny.ai"   # PENDÊNCIA — placeholder, confirmar domínio real
+  endereco: ""   # não aplicável — produto 100% remoto, sem endereço físico
+  instagram: "@gojohnnyai"   # PENDÊNCIA — handle placeholder, confirmar se existe
+  google_maps_embed: ""   # não aplicável
+
+depoimentos:
+  - nome: "Mariana T., São Paulo, 29 anos (placeholder)"
+    texto: "Finalmente um plano que respeita que eu trabalho 10h por dia. O GoJohnny não me manda fazer o que não consigo — ele adapta."
+    estrelas: 5
+  - nome: "Felipe R., Belo Horizonte, 34 anos (placeholder)"
+    texto: "R$39,90 é o que eu pagava de taxa de inscrição numa corrida. Agora esse dinheiro me prepara pra correr melhor."
+    estrelas: 5
+  - nome: "Camila S., Curitiba, 26 anos (placeholder)"
+    texto: "Achei estranho confiar num AI pra treinar. Testei 2 semanas e já estava correndo mais do que no ano passado inteiro."
+    estrelas: 5
+
+seo:
+  titulo: "GoJohnny AI — Coach de corrida com IA no WhatsApp | R$39,90/mês"
+  descricao_meta: "Plano semanal de corrida personalizado por IA, direto no WhatsApp. Sem app, sem humano, sem enrolação. R$39,90/mês. Entre na lista de espera."
+  keywords: "coach de corrida ia, treino de corrida whatsapp, plano de corrida personalizado, assessoria de corrida online, app de corrida com ia"
+
+features:
+  galeria_fotos: false      # sem fotos reais ainda — produto pré-lançamento
+  pagamento_online: false   # cobrança futura via WhatsApp, não no site
+  blog: false
+  mapa: false                # produto remoto, sem endereço físico
+
+# ──────────────────────────────────────────
+# EXTENSÕES A ESTE BRIEF — ver site-spec.md (fonte completa)
+# ──────────────────────────────────────────
+# Este YAML cobre os dados estruturados padrão do motor (SDD-MOTOR.md).
+# Design, UX, copy completo (headline/comparativo/seletor de tom/microcopy),
+# estrutura de 11 seções (estende o padrão do motor com "Seletor de tom" e
+# "Comparativo", e OMITE agendamento/admin) e integrações detalhadas estão
+# em site-spec.md, nesta mesma pasta — o motor deve seguir site-spec.md como
+# fonte da verdade, usando este YAML apenas para os dados tabulares.
+
+# ──────────────────────────────────────────
+# PENDÊNCIAS — confirmar com o usuário antes do lançamento
+# ──────────────────────────────────────────
+# pendencias:
+#   - Número de WhatsApp oficial do produto (contato/institucional)
+#   - E-mail de contato real (contato@gojohny.ai é placeholder de domínio)
+#   - Handle real do Instagram (@gojohnnyai não confirmado)
+#   - Depoimentos reais de usuários (produto pré-lançamento, sem base ainda)
+#   - Conteúdo real de Política de Privacidade e Termos de Uso
+#   - Imagem de Open Graph definitiva (1200x630)

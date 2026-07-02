@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-dark: #0D0D0D;
+  --color-bg-light: #F4F2EE;
+  --color-accent: #DAFF00;
+  --color-text-dark: #0D0D0D;
+  --color-text-light: #F4F2EE;
+  --color-muted: #6B6B6B;
+  --color-disabled: #2A2A2A;
+  --color-error: #FF4D4D;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* WhatsApp bubble entrance animation */
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wa-bubble-animate {
+  opacity: 0;
+  animation: bubbleIn 500ms ease forwards;
+}
+
+/* Custom focus style override to use accent color */
+*:focus-visible {
+  outline: 2px solid #DAFF00;
+  outline-offset: 3px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0D0D0D;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}

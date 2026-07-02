@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoJohnny AI — Coach de corrida com IA no WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0D0D0D;
+    --bg-light: #F4F2EE;
+    --accent: #DAFF00;
+    --text-dark: #0D0D0D;
+    --text-light: #F4F2EE;
+    --muted: #6B6B6B;
+    --disabled: #2A2A2A;
+    --error: #FF4D4D;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background: var(--bg-light);
+    overflow-x: hidden;
+  }
+  img, svg { display: block; max-width: 100%; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  section { position: relative; padding: 96px 0; }
+  @media (max-width: 768px) { section { padding: 64px 0; } }
+  .bg-dark { background: var(--bg-dark); color: var(--text-light); }
+  .bg-light { background: var(--bg-light); color: var(--text-dark); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 1.05; }
+  .eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: inline-block; }
+  .section-title { font-size: clamp(28px, 4vw, 44px); margin-bottom: 16px; }
+  .section-subtitle { font-size: 18px; color: var(--muted); max-width: 620px; margin-bottom: 48px; }
+  .bg-dark .section-subtitle { color: #B8B8B8; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: var(--text-dark);
+    font-family: var(--font-display); font-weight: 700; font-size: 16px;
+    padding: 16px 28px; border-radius: 8px; border: none; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(218,255,0,0.25);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+    text-decoration: none;
+  }
+  .cta-btn:hover { transform: scale(1.03); box-shadow: 0 12px 32px rgba(218,255,0,0.4); }
+  .cta-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* diagonal divider */
+  .divider {
+    position: absolute; left: 0; right: 0; height: 60px; z-index: 2;
+    pointer-events: none;
+  }
+  .divider-top { top: -1px; }
+  .divider path { fill: inherit; }
+
+  /* ===== NAV ===== */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 0; background: transparent;
+    transition: background 280ms ease, box-shadow 280ms ease, padding 280ms ease, transform 320ms ease;
+  }
+  header.solid { background: rgba(13,13,13,0.92); backdrop-filter: blur(8px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); padding: 14px 0; }
+  header.hide { transform: translateY(-100%); }
+  nav { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  .logo { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--text-light); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: #ccc; text-decoration: none; font-size: 14px; font-family: var(--font-mono); position: relative; padding-bottom: 4px; }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 0;
+    background: var(--accent); transition: width 220ms ease;
+  }
+  .nav-links a.active::after { width: 100%; }
+  .nav-cta { background: var(--accent); color: var(--text-dark); font-family: var(--font-mono); font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 6px; text-decoration: none; }
+  @media (max-width: 768px) { .nav-links { display: none; } }
+
+  .floating-cta {
+    position: fixed; bottom: 24px; right: 24px; z-index: 99;
+    opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none;
+    transition: opacity 260ms ease, transform 260ms ease;
+  }
+  .floating-cta.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 120px;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+  @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } .hero { min-height: auto; padding-bottom: 60px; } }
+  .hero h1 { font-size: clamp(34px, 5.4vw, 62px); color: var(--text-light); }
+  .word { display: inline-block; opacity: 0; transform: translateY(18px); transition: opacity 460ms ease, transform 460ms ease; }
+  .kinetic-wrap { display: inline-block; height: 1.15em; overflow: hidden; vertical-align: bottom; position: relative; }
+  .kinetic-item {
+    display: block; color: var(--accent);
+    position: absolute; top: 0; left: 0; width: 100%;
+    opacity: 0; transform: translateY(100%);
+    transition: opacity 420ms ease, transform 420ms ease;
+  }
+  .kinetic-item.active { opacity: 1; transform: translateY(0); }
+  .kinetic-item.leaving { opacity: 0; transform: translateY(-100%); }
+  .hero-sub { font-size: 18px; color: #C9C9C9; max-width: 480px; margin: 24px 0 32px; }
+  .hero-visual { position: relative; }
+  .parallax-el { transition: transform 60ms linear; }
+
+  /* whatsapp mockup */
+  .wa-mock {
+    background: #0B141A; border-radius: 20px; padding: 20px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5); max-width: 380px; margin: 0 auto;
+  }
+  .wa-head { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 14px; }
+  .wa-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; color: #0D0D0D; }
+  .wa-name { color: #fff; font-size: 14px; font-weight: 600; }
+  .wa-status { color: #8FA98A; font-size: 11px; font-family: var(--font-mono); }
+  .wa-bubble {
+    background: #1F2C34; color: #E9EDEF; padding: 12px 14px; border-radius: 4px 12px 12px 12px;
+    font-size: 13.5px; line-height: 1.5; max-width: 88%; margin-bottom: 10px;
+    opacity: 0; transform: translateY(10px);
+    animation: bubbleIn 500ms ease forwards;
+  }
+  .wa-bubble b { color: var(--accent); }
+  @keyframes bubbleIn { to { opacity: 1; transform: translateY(0); } }
+  .wa-bubble:nth-child(1) { animation-delay: 200ms; }
+  .wa-bubble:nth-child(2) { animation-delay: 700ms; }
+  .wa-bubble:nth-child(3) { animation-delay: 1200ms; }
+
+  /* ===== STATS ===== */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--font-display); font-size: clamp(32px, 4vw, 48px); font-weight: 800; color: var(--accent); }
+  .stat-label { font-family: var(--font-mono); font-size: 12px; text-transform: lowercase; color: #B8B8B8; margin-top: 8px; }
+
+  /* ===== TONE SELECTOR ===== */
+  .tone-wrap { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+  @media (max-width: 900px) { .tone-wrap { grid-template-columns: 1fr; } }
+  .tone-selector { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+  .tone-opt {
+    display: flex; align-items: center; gap: 12px; text-align: left;
+    background: #fff; border: 2px solid transparent; border-radius: 10px;
+    padding: 16px 18px; cursor: pointer; font-family: var(--font-body);
+    transition: border-color 200ms ease, background 200ms ease, transform 160ms ease;
+  }
+  .tone-opt:hover { transform: translateX(4px); }
+  .tone-opt.selected { border-color: var(--accent); background: rgba(218,255,0,0.08); }
+  .tone-opt .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--muted); flex-shrink: 0; position: relative; }
+  .tone-opt.selected .dot { border-color: var(--accent); }
+  .tone-opt.selected .dot::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--accent); }
+  .tone-opt strong { display: block; font-family: var(--font-display); font-size: 16px; }
+  .tone-opt span { font-size: 13px; color: var(--muted); }
+  .tone-preview {
+    background: var(--bg-dark); border-radius: 16px; padding: 28px;
+    min-height: 220px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .tone-preview .q { font-family: var(--font-mono); font-size: 12px; color: #8FA98A; margin-bottom: 14px; }
+  .tone-preview .a { color: var(--text-light); font-size: 17px; line-height: 1.6; transition: opacity 220ms ease; }
+  .tone-preview .a.fading { opacity: 0; }
+
+  /* ===== STEPPER ===== */
+  .stepper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; margin-top: 32px; }
+  @media (max-width: 768px) { .stepper { grid-template-columns: 1fr; gap: 32px; } }
+  .stepper::before {
+    content: ''; position: absolute; top: 22px; left: 8%; right: 8%; height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--line-progress, 0%), #ddd var(--line-progress, 0%), #ddd 100%);
+    transition: --line-progress 600ms ease;
+  }
+  @media (max-width: 768px) { .stepper::before { display: none; } }
+  .step { position: relative; }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--bg-dark); color: var(--accent);
+    font-family: var(--font-mono); font-weight: 700; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; position: relative; z-index: 2;
+  }
+  .step h3 { font-size: 20px; margin-bottom: 10px; }
+  .step p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  /* ===== COMPARATIVO ===== */
+  table.compare { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  table.compare th, table.compare td { padding: 16px 18px; text-align: left; font-size: 14.5px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  table.compare th { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: #9a9a9a; }
+  table.compare th.col-goj, table.compare td.col-goj { color: var(--accent); font-weight: 600; }
+  table.compare td.col-human { color: #7a7a7a; }
+  table.compare tr { transition: background 200ms ease; }
+  table.compare tbody tr:hover { background: rgba(218,255,0,0.06); }
+  .compare-note { margin-top: 20px; color: #999; font-size: 13.5px; max-width: 560px; }
+
+  /* ===== SHOWCASE ===== */
+  .showcase-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .showcase-grid { grid-template-columns: 1fr; } }
+  .showcase-bullets { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+  .showcase-bullets li { display: flex; gap: 12px; font-size: 15px; color: var(--text-dark); }
+  .showcase-bullets li::before { content: '/'; color: var(--accent); font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+
+  /* ===== DEPOIMENTOS ===== */
+  .testi-wrap { position: relative; max-width: 640px; margin: 0 auto; }
+  .testi-track { display: flex; transition: transform 500ms ease; }
+  .testi-card { min-width: 100%; padding: 8px; }
+  .testi-inner { background: #16181A; border-radius: 16px; padding: 32px; border: 1px solid rgba(255,255,255,0.06); }
+  .testi-inner p { font-size: 16px; line-height: 1.7; color: #E4E4E4; margin-bottom: 18px; }
+  .testi-inner footer { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); }
+  .testi-badge { font-family: var(--font-mono); font-size: 10.5px; color: #777; margin-top: 6px; display: block; }
+  .testi-dots { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
+  .testi-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: #444; cursor: pointer; padding: 0; }
+  .testi-dots button.active { background: var(--accent); width: 22px; border-radius: 4px; transition: width 200ms ease; }
+
+  /* ===== PRICING ===== */
+  .price-card {
+    max-width: 460px; margin: 0 auto; background: #fff; border-radius: 20px;
+    padding: 40px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  }
+  .price-value { font-family: var(--font-display); font-size: 52px; font-weight: 800; }
+  .price-value span { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .price-list { list-style: none; text-align: left; margin: 28px 0; display: flex; flex-direction: column; gap: 12px; }
+  .price-list li { font-size: 14.5px; display: flex; gap: 10px; }
+  .price-list li::before { content: '✓'; color: var(--accent); font-weight: 700; background: var(--bg-dark); width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+
+  /* ===== FORM ===== */
+  .form-wrap { max-width: 480px; margin: 0 auto; }
+  .field { margin-bottom: 18px; text-align: left; }
+  .field label { display: block; font-family: var(--font-mono); font-size: 12px; margin-bottom: 8px; color: #ccc; }
+  .field input, .field select {
+    width: 100%; padding: 14px 16px; border-radius: 8px; border: 1px solid #333;
+    background: #161616; color: #fff; font-family: var(--font-body); font-size: 15px;
+  }
+  .field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .field-error { color: var(--error); font-size: 12.5px; margin-top: 6px; display: none; }
+  .field.has-error input { border-color: var(--error); }
+  .field.has-error .field-error { display: block; }
+  .form-submit { width: 100%; justify-content: center; margin-top: 8px; }
+  .form-micro { text-align: center; font-size: 12.5px; color: #888; margin-top: 14px; }
+  .form-feedback { display: none; text-align: center; padding: 20px; border-radius: 10px; margin-top: 16px; font-size: 14.5px; }
+  .form-feedback.success { background: rgba(218,255,0,0.1); color: var(--accent); display: block; }
+  .form-feedback.error { background: rgba(255,77,77,0.1); color: var(--error); display: block; }
+
+  /* ===== FOOTER ===== */
+  footer.site-footer { padding: 56px 0 32px; }
+  .footer-grid { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+  .footer-links { display: flex; gap: 20px; list-style: none; font-size: 13px; }
+  .footer-links a { color: #999; text-decoration: none; }
+  .lgpd-note { font-size: 12px; color: #777; max-width: 420px; margin-top: 16px; line-height: 1.6; }
+  .copyright { margin-top: 32px; font-size: 12px; color: #666; font-family: var(--font-mono); }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 420ms ease, transform 420ms ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .stagger.visible { transition-delay: calc(var(--i, 0) * 80ms); }
+  @media (max-width: 768px) {
+    .reveal { transform: translateY(12px); transition-duration: 320ms; }
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <nav>
+    <a href="#hero" class="logo">GoJohnny<span>AI</span></a>
+    <ul class="nav-links">
+      <li><a href="#como-funciona" data-nav>Como funciona</a></li>
+      <li><a href="#comparativo" data-nav>Comparativo</a></li>
+      <li><a href="#preco" data-nav>Preço</a></li>
+    </ul>
+    <a href="#formulario" class="nav-cta">Entrar na lista</a>
+  </nav>
+</header>
+
+<a href="#formulario" class="cta-btn floating-cta" id="floatingCta">Quero entrar →</a>
+
+<!-- HERO -->
+<section class="bg-dark hero" id="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1 id="heroTitle" aria-label="Seu coach de corrida está no WhatsApp."></h1>
+      <div style="margin-top:14px; font-family: var(--font-display); font-size: clamp(20px,3vw,28px); font-weight:700;">
+        <span class="kinetic-wrap" id="kineticWrap" style="width: 220px;"></span>
+      </div>
+      <p class="hero-sub">GoJohnny monta seu plano semanal de corrida com IA e manda direto no WhatsApp. Toda semana. Sem você precisar de mais um aplicativo.</p>
+      <a href="#formulario" class="cta-btn">Quero entrar na lista de espera</a>
+    </div>
+    <div class="hero-visual">
+      <div class="wa-mock parallax-el" id="waParallax">
+        <div class="wa-head">
+          <div class="wa-avatar">GJ</div>
+          <div>
+            <div class="wa-name">GoJohnny AI</div>
+            <div class="wa-status">online</div>
+          </div>
+        </div>
+        <div class="wa-bubble">Bom dia, João! Aqui está seu plano da semana 🏃</div>
+        <div class="wa-bubble"><b>Segunda:</b> rodagem 6km, pace 6:10/km<br><b>Quarta:</b> tiros 8x400m</div>
+        <div class="wa-bubble">Você mencionou que terça é corrida em grupo — movi seu longão pro domingo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="bg-dark" id="stats" style="padding-top:48px;">
+  <div class="container stats-grid">
+    <div class="stat reveal stagger" style="--i:0"><div class="stat-num" data-count="1200" data-suffix="+">0</div><div class="stat-label">corredores na lista</div></div>
+    <div class="stat reveal stagger" style="--i:1"><div class="stat-num" data-count="4.8" data-decimal="1" data-suffix=" ★">0</div><div class="stat-label">avaliação média (beta)</div></div>
+    <div class="stat reveal stagger" style="--i:2"><div class="stat-num" data-static="&lt; 5 min">&lt; 5 min</div><div class="stat-label">para receber seu plano</div></div>
+    <div class="stat reveal stagger" style="--i:3"><div class="stat-num" data-static="R$39,90">R$39,90</div><div class="stat-label">por mês, sem fidelidade</div></div>
+  </div>
+</section>
+
+<!-- TONE SELECTOR -->
+<section class="bg-light" id="tom">
+  <div class="container">
+    <span class="eyebrow reveal">Diferencial real</span>
+    <h2 class="section-title reveal">O GoJohnny tem personalidade. Escolhe a sua.</h2>
+    <p class="section-subtitle reveal">A maioria dos apps de treino com IA te dá o mesmo plano genérico, não importa quem você é. O GoJohnny ajusta até o jeito de falar com você.</p>
+    <div class="tone-wrap">
+      <div class="reveal" role="radiogroup" aria-label="Escolha o tom do coach" class="tone-selector">
+        <div class="tone-selector">
+          <button class="tone-opt selected" role="radio" aria-checked="true" data-tone="acolhedor">
+            <span class="dot"></span>
+            <span><strong>Acolhedor</strong><span>Motivação com gentileza</span></span>
+          </button>
+          <button class="tone-opt" role="radio" aria-checked="false" data-tone="direto">
+            <span class="dot"></span>
+            <span><strong>Direto</strong><span>Sem enrolação, sem drama</span></span>
+          </button>
+          <button class="tone-opt" role="radio" aria-checked="false" data-tone="exigente">
+            <span class="dot"></span>
+            <span><strong>Exigente</strong><span>Cobra consistência</span></span>
+          </button>
+        </div>
+      </div>
+      <div class="tone-preview reveal">
+        <div class="q">"Oi Johnny, não consegui treinar hoje, tive um dia difícil."</div>
+        <div class="a" id="toneAnswer">Entendo. Dia difícil acontece, e tudo bem não treinar hoje. Vamos ajustar a semana pra você não perder o ritmo — que tal um rodagem leve amanhã, sem pressão?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="bg-dark" id="como-funciona">
+  <div class="container">
+    <span class="eyebrow reveal">Como funciona</span>
+    <h2 class="section-title reveal" style="color:var(--text-light)">Mais simples do que parece.</h2>
+    <div class="stepper" id="stepper">
+      <div class="step reveal stagger" style="--i:0">
+        <div class="step-num">01</div>
+        <h3 style="color:var(--text-light)">Você assina</h3>
+        <p>Entra na lista, escolhe o plano e responde 5 perguntas sobre sua rotina de corrida. Tudo pelo WhatsApp.</p>
+      </div>
+      <div class="step reveal stagger" style="--i:1">
+        <div class="step-num">02</div>
+        <h3 style="color:var(--text-light)">A IA monta seu treino</h3>
+        <p>GoJohnny analisa seu histórico, objetivo e disponibilidade. Não é chatbot genérico — é metodologia de corrida com opinião.</p>
+      </div>
+      <div class="step reveal stagger" style="--i:2">
+        <div class="step-num">03</div>
+        <h3 style="color:var(--text-light)">Recebe e corre</h3>
+        <p>Toda segunda-feira, seu plano chega no WhatsApp. Sem lembrete, sem app pra abrir, sem desculpa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVO -->
+<section class="bg-dark" id="comparativo" style="padding-top:48px;">
+  <div class="container">
+    <span class="eyebrow reveal">Comparativo</span>
+    <h2 class="section-title reveal" style="color:var(--text-light)">Seu coach humano não aguenta esse preço.</h2>
+    <table class="compare reveal">
+      <thead>
+        <tr><th></th><th>Coach humano</th><th class="col-goj">GoJohnny AI</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Preço</td><td class="col-human">R$300–800/mês</td><td class="col-goj">R$39,90/mês</td></tr>
+        <tr><td>Disponibilidade</td><td class="col-human">Horário comercial</td><td class="col-goj">24h, 7 dias</td></tr>
+        <tr><td>Plano semanal</td><td class="col-human">Com sorte, na terça</td><td class="col-goj">Toda segunda, sem falta</td></tr>
+        <tr><td>Canal</td><td class="col-human">App próprio, e-mail, WhatsApp — depende</td><td class="col-goj">WhatsApp. Só.</td></tr>
+        <tr><td>Personalidade</td><td class="col-human">Depende de quem calhou</td><td class="col-goj">Você escolhe o tom</td></tr>
+        <tr><td>Feedback</td><td class="col-human">Agenda uma sessão</td><td class="col-goj">Manda uma mensagem</td></tr>
+      </tbody>
+    </table>
+    <p class="compare-note reveal">Não é para substituir coaching de elite. É para o corredor que treina sério mas não quer pagar R$300-800/mês por um plano genérico.</p>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="bg-light" id="showcase">
+  <div class="container showcase-grid">
+    <div>
+      <span class="eyebrow reveal" style="color:#8a9c00">Na prática</span>
+      <h2 class="section-title reveal">É assim que chega.</h2>
+      <p class="section-subtitle reveal">Um plano real, não um template. Semana a semana, ajustado ao seu momento.</p>
+      <ul class="showcase-bullets">
+        <li class="reveal stagger" style="--i:0">Plano semanal personalizado toda segunda</li>
+        <li class="reveal stagger" style="--i:1">Ajuste por lesão, viagem ou semana difícil</li>
+        <li class="reveal stagger" style="--i:2">Suporte via chat quando precisar</li>
+        <li class="reveal stagger" style="--i:3">Relatório mensal de evolução</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="wa-mock" style="max-width:340px;">
+        <div class="wa-head">
+          <div class="wa-avatar">GJ</div>
+          <div><div class="wa-name">GoJohnny AI</div><div class="wa-status">online</div></div>
+        </div>
+        <div class="wa-bubble">Semana passada: 3 de 3 treinos concluídos 🔥</div>
+        <div class="wa-bubble"><b>Quinta:</b> tiro 6x800m, pace 5:20<br><b>Sábado:</b> longão 12km</div>
+        <div class="wa-bubble">Dica da semana: hidrate 500ml 2h antes do longão.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="bg-dark" id="depoimentos">
+  <div class="container">
+    <span class="eyebrow reveal" style="text-align:center; display:block;">Confiança</span>
+    <h2 class="section-title reveal" style="color:var(--text-light); text-align:center;">Quem já está na lista.</h2>
+    <p style="text-align:center; color:#888; font-size:12.5px; margin-bottom:24px;" class="reveal">*depoimentos ilustrativos — produto em pré-lançamento, substituir por reais antes do go-live</p>
+    <div class="testi-wrap reveal" id="testiWrap">
+      <div class="testi-track" id="testiTrack">
+        <div class="testi-card"><div class="testi-inner"><p>"Finalmente um plano que respeita que eu trabalho 10h por dia. O GoJohnny não me manda fazer o que não consigo — ele adapta."</p><footer>Mariana T., São Paulo, 29 anos</footer><span class="testi-badge">depoimento ilustrativo</span></div></div>
+        <div class="testi-card"><div class="testi-inner"><p>"R$39,90 é o que eu pagava de taxa de inscrição numa corrida. Agora esse dinheiro me prepara pra correr melhor."</p><footer>Felipe R., Belo Horizonte, 34 anos</footer><span class="testi-badge">depoimento ilustrativo</span></div></div>
+        <div class="testi-card"><div class="testi-inner"><p>"Achei estranho confiar num AI pra treinar. Testei 2 semanas e já estava correndo mais do que no ano passado inteiro."</p><footer>Camila S., Curitiba, 26 anos</footer><span class="testi-badge">depoimento ilustrativo</span></div></div>
+      </div>
+      <div class="testi-dots" id="testiDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="bg-light" id="preco">
+  <div class="container">
+    <h2 class="section-title reveal" style="text-align:center;">Um preço que não precisa de asterisco.</h2>
+    <div class="price-card reveal">
+      <div class="price-value">R$39,90<span>/mês</span></div>
+      <p style="color:var(--muted); margin-top:8px; font-size:14px;">Sem fidelidade. Sem taxa de adesão. Cancela quando quiser — pelo WhatsApp mesmo.</p>
+      <ul class="price-list">
+        <li>Plano semanal personalizado toda segunda-feira</li>
+        <li>Ajuste de treino por lesão ou agenda</li>
+        <li>Suporte via chat para dúvidas de corrida</li>
+        <li>Relatório mensal de evolução</li>
+        <li>Escolha do tom do coach</li>
+      </ul>
+      <a href="#formulario" class="cta-btn" style="width:100%; justify-content:center;">Quero entrar na lista de espera</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="bg-dark" id="formulario">
+  <div class="container">
+    <h2 class="section-title reveal" style="color:var(--text-light); text-align:center;">Seja um dos primeiros.</h2>
+    <p class="section-subtitle reveal" style="text-align:center; margin-left:auto; margin-right:auto;">GoJohnny está em fase de lançamento. Entre na lista — quando abrir vaga, a gente avisa no seu WhatsApp.</p>
+    <form class="form-wrap reveal" id="waitlistForm" novalidate>
+      <div class="field" id="fieldNome">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" placeholder="Seu nome" autocomplete="name">
+        <div class="field-error">Digite seu nome (mínimo 2 letras).</div>
+      </div>
+      <div class="field" id="fieldWhats">
+        <label for="whatsapp">WhatsApp</label>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="numeric">
+        <div class="field-error">Confere esse número de WhatsApp — parece que faltou ou sobrou algum dígito.</div>
+      </div>
+      <div class="field" id="fieldObjetivo">
+        <label for="objetivo">Qual é o seu principal objetivo?</label>
+        <select id="objetivo" name="objetivo">
+          <option value="">Selecione uma opção</option>
+          <option>Completar minha primeira corrida de rua</option>
+          <option>Melhorar meu tempo (bater meu PR)</option>
+          <option>Correr com mais consistência</option>
+          <option>Me preparar para uma prova específica</option>
+          <option>Emagrecer e ganhar condicionamento</option>
+        </select>
+        <div class="field-error">Escolhe uma opção da lista.</div>
+      </div>
+      <button type="submit" class="cta-btn form-submit">Entrar na lista de espera</button>
+      <p class="form-micro">Sem spam. Sem ligações. A gente avisa pelo WhatsApp quando abrir vaga.</p>
+      <div class="form-feedback" id="formFeedback"></div>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer bg-dark">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#hero" class="logo">GoJohnny<span>AI</span></a>
+        <p style="color:#999; font-size:13px; margin-top:8px;">Coach de corrida com IA. No WhatsApp.</p>
+        <p class="lgpd-note">Seus dados (nome e WhatsApp) são usados só para te avisar sobre a lista de espera. Nunca compartilhados. Ver política de privacidade.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">@gojohnnyai</a></li>
+      </ul>
+    </div>
+    <p class="copyright">© 2026 GoJohnny AI. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+// ===== Word-by-word hero reveal =====
+(function() {
+  const el = document.getElementById('heroTitle');
+  const text = el.getAttribute('aria-label');
+  const words = text.split(' ');
+  el.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
+  const spans = el.querySelectorAll('.word');
+  spans.forEach((s, i) => {
+    setTimeout(() => { s.style.opacity = 1; s.style.transform = 'translateY(0)'; }, 200 + i * 90);
+  });
+})();
+
+// ===== Kinetic loop =====
+(function() {
+  const items = ['Sem app.', 'Sem humano.', 'Por R$39,90/mês.'];
+  const wrap = document.getElementById('kineticWrap');
+  let current = 0;
+  function render() {
+    wrap.innerHTML = '';
+    const el = document.createElement('span');
+    el.className = 'kinetic-item';
+    el.textContent = items[current];
+    wrap.appendChild(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('active')));
+  }
+  render();
+  setInterval(() => {
+    const old = wrap.querySelector('.kinetic-item');
+    if (old) { old.classList.remove('active'); old.classList.add('leaving'); }
+    current = (current + 1) % items.length;
+    setTimeout(render, 300);
+  }, 2200);
+})();
+
+// ===== Nav: hide on scroll down, solid bg, active section =====
+(function() {
+  const header = document.getElementById('header');
+  const floatingCta = document.getElementById('floatingCta');
+  const hero = document.getElementById('hero');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    header.classList.toggle('solid', y > 40);
+    if (y > lastY && y > 120) header.classList.add('hide');
+    else header.classList.remove('hide');
+    lastY = y;
+    floatingCta.classList.toggle('show', y > hero.offsetHeight * 0.8);
+
+    // parallax hero
+    const waEl = document.getElementById('waParallax');
+    if (waEl && y < hero.offsetHeight) {
+      waEl.style.transform = `translateY(${y * 0.15}px)`;
+    }
+  });
+
+  const navLinks = document.querySelectorAll('[data-nav]');
+  const sections = ['como-funciona', 'comparativo', 'preco'].map(id => document.getElementById(id));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`[data-nav][href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  sections.forEach(s => s && obs.observe(s));
+})();
+
+// ===== Scroll reveal =====
+(function() {
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => obs.observe(el));
+})();
+
+// ===== Count-up stats =====
+(function() {
+  const stats = document.querySelectorAll('.stat-num[data-count]');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseFloat(el.dataset.count);
+      const decimal = parseInt(el.dataset.decimal || '0');
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = target * eased;
+        el.textContent = value.toFixed(decimal) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  stats.forEach(el => obs.observe(el));
+})();
+
+// ===== Stepper line progress =====
+(function() {
+  const stepper = document.getElementById('stepper');
+  if (!stepper) return;
+  window.addEventListener('scroll', () => {
+    const rect = stepper.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const progress = Math.min(Math.max((vh - rect.top) / (rect.height + vh * 0.3), 0), 1);
+    stepper.style.setProperty('--line-progress', (progress * 100) + '%');
+  });
+})();
+
+// ===== Tone selector =====
+(function() {
+  const answers = {
+    acolhedor: "Entendo. Dia difícil acontece, e tudo bem não treinar hoje. Vamos ajustar a semana pra você não perder o ritmo — que tal um rodagem leve amanhã, sem pressão?",
+    direto: "Beleza, anotado. Sem culpa — dia ruim é dia ruim. Amanhã a gente retoma: rodagem de 5km, pace tranquilo. Bora.",
+    exigente: "Tudo bem, um dia perdido não define a semana — mas não vira hábito. Amanhã o treino continua de pé, sem desconto. Te espero."
+  };
+  const opts = document.querySelectorAll('.tone-opt');
+  const answerEl = document.getElementById('toneAnswer');
+  opts.forEach(opt => {
+    opt.addEventListener('click', () => {
+      opts.forEach(o => { o.classList.remove('selected'); o.setAttribute('aria-checked', 'false'); });
+      opt.classList.add('selected');
+      opt.setAttribute('aria-checked', 'true');
+      answerEl.classList.add('fading');
+      setTimeout(() => {
+        answerEl.textContent = answers[opt.dataset.tone];
+        answerEl.classList.remove('fading');
+      }, 220);
+    });
+    opt.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); opt.click(); }
+    });
+  });
+})();
+
+// ===== Testimonial carousel =====
+(function() {
+  const track = document.getElementById('testiTrack');
+  const dotsWrap = document.getElementById('testiDots');
+  const cards = track.querySelectorAll('.testi-card');
+  let index = 0;
+  let timer;
+
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('button');
+
+  function goTo(i) {
+    index = i;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, di) => d.classList.toggle('active', di === index));
+  }
+  function next() { goTo((index + 1) % cards.length); }
+
+  function start() { timer = setInterval(next, 4500); }
+  function stop() { clearInterval(timer); }
+  start();
+
+  const wrap = document.getElementById('testiWrap');
+  wrap.addEventListener('mouseenter', stop);
+  wrap.addEventListener('mouseleave', start);
+})();
+
+// ===== Form validation (visual only, no real submit) =====
+(function() {
+  const form = document.getElementById('waitlistForm');
+  const feedback = document.getElementById('formFeedback');
+
+  function validatePhone(v) {
+    const digits = v.replace(/\D/g, '').replace(/^55/, '');
+    return digits.length === 10 || digits.length === 11;
+  }
+
+  function setError(fieldId, hasError) {
+    document.getElementById(fieldId).classList.toggle('has-error', hasError);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    feedback.className = 'form-feedback';
+    feedback.textContent = '';
+
+    const nome = document.getElementById('nome').value.trim();
+    const whats = document.getElementById('whatsapp').value.trim();
+    const objetivo = document.getElementById('objetivo').value;
+
+    let valid = true;
+    if (nome.length < 2) { setError('fieldNome', true); valid = false; } else setError('fieldNome', false);
+    if (!validatePhone(whats)) { setError('fieldWhats', true); valid = false; } else setError('fieldWhats', false);
+    if (!objetivo) { setError('fieldObjetivo', true); valid = false; } else setError('fieldObjetivo', false);
+
+    if (!valid) {
+      feedback.classList.add('error');
+      feedback.textContent = 'Algo deu errado. Tente de novo ou manda mensagem pra gente no Instagram.';
+      return;
+    }
+
+    feedback.classList.add('success');
+    feedback.textContent = 'Você está na lista. Fique de olho no WhatsApp — quando abrir vaga, você é um dos primeiros a saber.';
+    form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+  });
+
+  document.getElementById('whatsapp').addEventListener('input', (e) => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+    else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+    e.target.value = v;
+  });
+})();
+</script>
+</body>
+</html>
