@@ -78,6 +78,9 @@ export default function Stats() {
             staticText="R$39,90"
           />
         </div>
+        <p className="text-center text-[11px] text-[#777] font-mono mt-6">
+          *números de lançamento, fase pré-venda — ainda não auditados
+        </p>
       </div>
     </section>
   )

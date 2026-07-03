@@ -29,11 +29,7 @@ const TONES = [
 
 export default function ToneSelector() {
   const [selected, setSelected] = useState(0)
-  const optRefs = [
-    useRef<HTMLButtonElement>(null),
-    useRef<HTMLButtonElement>(null),
-    useRef<HTMLButtonElement>(null),
-  ]
+  const optRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     let next = index
@@ -47,7 +43,7 @@ export default function ToneSelector() {
       return
     }
     setSelected(next)
-    optRefs[next].current?.focus()
+    optRefs.current[next]?.focus()
   }
 
   return (
@@ -101,7 +97,9 @@ export default function ToneSelector() {
             {TONES.map((tone, i) => (
               <button
                 key={tone.id}
-                ref={optRefs[i]}
+                ref={(el) => {
+                  optRefs.current[i] = el
+                }}
                 role="radio"
                 aria-checked={selected === i}
                 tabIndex={selected === i ? 0 : -1}

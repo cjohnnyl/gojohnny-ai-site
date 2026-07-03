@@ -24,7 +24,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://gojohnny.ai'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://gojohnny-ai-site.vercel.app'
+  ),
   title: 'GoJohnny AI — Coach de corrida com IA no WhatsApp | R$39,90/mês',
   description:
     'Plano semanal de corrida personalizado por IA, direto no WhatsApp. Sem app, sem humano, sem enrolação. R$39,90/mês. Entre na lista de espera.',
