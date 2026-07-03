@@ -1,7 +1,7 @@
 # Checkpoint — Site institucional GoJohnny AI
 
 **Data:** 2026-07-02
-**Status:** Publicado em produção. QA final em andamento.
+**Status:** Publicado em produção, QA concluído, achados prioritários corrigidos e redeployados.
 
 ## Pipeline executado
 
@@ -25,8 +25,24 @@
 6. Deploy de produção via `vercel --prod`: **https://gojohnny-ai-site.vercel.app**
    (env vars `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`
    configuradas no projeto Vercel, produção confirmada pelo usuário antes do deploy).
-7. `qa` acionado para smoke test da URL real + revisão de código — resultado
-   pendente no momento deste checkpoint.
+7. `qa` rodou smoke test da URL real + revisão de código — **aprovado com ressalvas**.
+   Achados prioritários corrigidos na hora e redeployados:
+   - `metadataBase` apontava para `https://gojohnny.ai` (domínio que não existe
+     ainda) — quebrava preview de compartilhamento social (OG image/Twitter
+     card). Corrigido para usar `NEXT_PUBLIC_SITE_URL` com fallback pra URL
+     real da Vercel.
+   - Stats ("1.200+ corredores na lista", "4.8 ★") exibidos sem indicação de
+     que são números de lançamento/estimados — risco de propaganda enganosa
+     pra produto pré-lançamento sem base de usuário confirmada. Adicionado
+     disclaimer visível abaixo do stats strip.
+   - `ToneSelector.tsx` tinha 3x `useRef` dentro de array literal, violando
+     Rules of Hooks do React (funcionava, mas era dívida técnica real).
+     Corrigido para `useRef<(HTMLButtonElement|null)[]>([])`.
+   - Riscos menores registrados mas não corrigidos agora (backlog, não
+     bloqueiam MVP): `console.error` expõe erro do Supabase no console do
+     browser; formulário público sem rate limiting/CAPTCHA; menção a
+     Instagram no erro genérico sem link direto.
+   Segundo deploy: mesma URL (`vercel --prod` sobrescreve o alias de produção).
 
 ## Pendências herdadas da spec (não bloqueiam o deploy, mas precisam de dono antes do lançamento real)
 
