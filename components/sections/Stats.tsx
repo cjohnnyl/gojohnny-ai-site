@@ -59,8 +59,22 @@ export default function Stats() {
     <section id="stats" className="bg-bg-dark py-12">
       <div className="max-w-site mx-auto px-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <StatItem index={0} num={1200} suffix="+" label="corredores na lista" />
-          <StatItem index={1} num={4.8} decimal={1} suffix=" ★" label="avaliação média (beta)" />
+          <StatItem
+            index={0}
+            num={0}
+            suffix=""
+            label="fase de pré-venda"
+            isStatic
+            staticText="Em breve"
+          />
+          <StatItem
+            index={1}
+            num={0}
+            suffix=""
+            label="sem humano no meio"
+            isStatic
+            staticText="100% IA"
+          />
           <StatItem
             index={2}
             num={0}
@@ -78,9 +92,6 @@ export default function Stats() {
             staticText="R$39,90"
           />
         </div>
-        <p className="text-center text-[11px] text-[#777] font-mono mt-6">
-          *números de lançamento, fase pré-venda — ainda não auditados
-        </p>
       </div>
     </section>
   )
