@@ -3,10 +3,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+const NAV_LINKS = [
+  { href: '#como-funciona', label: 'Como funciona', sectionId: 'como-funciona' },
+  { href: '#comparativo', label: 'Comparativo', sectionId: 'comparativo' },
+  { href: '#preco', label: 'Preço', sectionId: 'preco' },
+]
+
 export default function Navbar() {
   const [solid, setSolid] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [showFloating, setShowFloating] = useState(false)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const lastY = useRef(0)
 
   useEffect(() => {
@@ -25,6 +33,21 @@ export default function Navbar() {
       if (hero) {
         setShowFloating(y > hero.offsetHeight * 0.8)
       }
+
+      // Scroll progress bar (0–100)
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      setScrollProgress(docHeight > 0 ? (y / docHeight) * 100 : 0)
+
+      // Active section: topmost section whose top is above 35% of viewport
+      const viewportThreshold = y + window.innerHeight * 0.35
+      let current: string | null = null
+      for (const { sectionId } of NAV_LINKS) {
+        const el = document.getElementById(sectionId)
+        if (el && el.offsetTop <= viewportThreshold) {
+          current = sectionId
+        }
+      }
+      setActiveSection(current)
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -33,6 +56,17 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Scroll progress bar — 2px accent line at very top, z above nav */}
+      <div
+        className="fixed top-0 left-0 z-[60] h-[2px] bg-accent pointer-events-none"
+        style={{ width: `${scrollProgress}%`, transition: 'width 80ms linear' }}
+        role="progressbar"
+        aria-valuenow={Math.round(scrollProgress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Progresso de leitura da página"
+      />
+
       <header
         style={{
           transition:
@@ -55,24 +89,31 @@ export default function Navbar() {
           </a>
 
           <ul className="hidden md:flex gap-7 list-none m-0 p-0">
-            {[
-              { href: '#como-funciona', label: 'Como funciona' },
-              { href: '#comparativo', label: 'Comparativo' },
-              { href: '#preco', label: 'Preço' },
-            ].map(({ href, label }) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  className="text-[#ccc] no-underline text-sm font-mono relative pb-1
-                    after:content-[''] after:absolute after:left-0 after:bottom-0
-                    after:h-0.5 after:w-0 after:bg-accent
-                    after:transition-all after:duration-200
-                    hover:after:w-full hover:text-text-light transition-colors duration-200"
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
+            {NAV_LINKS.map(({ href, label, sectionId }) => {
+              const isActive = activeSection === sectionId
+              return (
+                <li key={href} className="relative pb-1">
+                  <a
+                    href={href}
+                    aria-current={isActive ? 'location' : undefined}
+                    className={[
+                      'text-sm font-mono no-underline transition-colors duration-200 block',
+                      isActive ? 'text-text-light' : 'text-[#ccc] hover:text-text-light',
+                    ].join(' ')}
+                  >
+                    {label}
+                  </a>
+                  {/* Animated underline pill — slides between active items via layoutId */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute left-0 bottom-0 right-0 h-[2px] bg-accent rounded-full"
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                </li>
+              )
+            })}
           </ul>
 
           <a

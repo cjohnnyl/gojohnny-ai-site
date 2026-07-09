@@ -38,6 +38,23 @@ body {
   animation: bubbleIn 500ms ease forwards;
 }
 
+/* Typing indicator dots — ToneSelector */
+@keyframes typingDot {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.typing-dot {
+  display: inline-block;
+  animation: typingDot 1.2s ease-in-out infinite;
+}
+
 /* Custom focus style override to use accent color */
 *:focus-visible {
   outline: 2px solid #DAFF00;

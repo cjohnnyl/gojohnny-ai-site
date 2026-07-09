@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 
 const HERO_WORDS = 'Seu coach de corrida está no WhatsApp.'.split(' ')
-const KINETIC_ITEMS = ['Sem app.', 'Sem humano.', 'Por R$39,90/mês.']
+const KINETIC_ITEMS = ['Com personalidade.', 'Sem app.', 'Sem humano.', 'Por R$39,90/mês.']
 
 const containerVariants: Variants = {
   hidden: {},
@@ -80,7 +80,6 @@ export default function Hero() {
         mockupRef.current.style.transform = `translateY(${y * 0.15}px)`
       }
     }
-    // Only add parallax on desktop
     const mq = window.matchMedia('(min-width: 768px)')
     if (mq.matches) {
       window.addEventListener('scroll', onScroll, { passive: true })
@@ -91,7 +90,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="bg-bg-dark min-h-screen flex items-center pt-[120px] pb-16 md:pb-24"
+      className="bg-bg-dark min-h-screen flex items-center pt-[120px] pb-16 md:pb-24 relative"
     >
       <div className="max-w-site mx-auto px-5 w-full">
         <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
@@ -178,6 +177,31 @@ export default function Hero() {
           <WhatsAppMockup />
         </motion.div>
       </div>
+
+      {/* Scroll cue — bouncing chevron at bottom of hero */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.6, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none"
+        aria-hidden="true"
+      >
+        <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#555]">rolar</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M5 7.5L10 12.5L15 7.5"
+              stroke="#555"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }
