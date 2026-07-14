@@ -1,6 +1,13 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger, useGSAP)
+}
 
 const STEPS = [
   {
@@ -21,67 +28,146 @@ const STEPS = [
 ]
 
 export default function ComoFunciona() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+  const circleRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  useGSAP(
+    () => {
+      // Reveal do cabeçalho (header) — trigger simples, sem scrub.
+      gsap.from('[data-header]', {
+        opacity: 0,
+        y: 12,
+        duration: 0.42,
+        ease: 'power2.out',
+        stagger: 0.06,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 75%',
+        },
+      })
+
+      // Scroll storytelling: desktop pina a seção e escrubba a timeline
+      // (linha se desenha + cada etapa acende) junto com o scroll real —
+      // mais controle de timing que IntersectionObserver/whileInView para
+      // uma sequência de 3+ estágios.
+      const mm = gsap.matchMedia()
+
+      mm.add('(min-width: 768px)', () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top+=80',
+            end: '+=900',
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+          },
+        })
+
+        tl.fromTo(lineRef.current, { scaleX: 0 }, { scaleX: 1, ease: 'none', duration: 1 })
+
+        STEPS.forEach((_, i) => {
+          tl.fromTo(
+            stepRefs.current[i],
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, ease: 'power1.out', duration: 0.6 },
+            i === 0 ? '<0.1' : '<0.5'
+          ).fromTo(
+            circleRefs.current[i],
+            { borderColor: '#333' },
+            { borderColor: 'rgba(218,255,0,0.4)', duration: 0.4 },
+            '<'
+          )
+        })
+
+        return () => {
+          tl.kill()
+        }
+      })
+
+      // Mobile: sem pin, reveal simples ao entrar na viewport (mais toque,
+      // menos storytelling de scroll travado — ver ux-plan.md).
+      mm.add('(max-width: 767px)', () => {
+        gsap.set(lineRef.current, { scaleX: 1 })
+
+        STEPS.forEach((_, i) => {
+          gsap.set(circleRefs.current[i], { borderColor: 'rgba(218,255,0,0.4)' })
+          gsap.from(stepRefs.current[i], {
+            opacity: 0,
+            y: 20,
+            duration: 0.48,
+            ease: 'power2.out',
+            delay: i * 0.1,
+            scrollTrigger: {
+              trigger: stepRefs.current[i],
+              start: 'top 85%',
+            },
+          })
+        })
+      })
+
+      return () => mm.revert()
+    },
+    { scope: sectionRef }
+  )
+
   return (
-    <section id="como-funciona" className="bg-bg-dark py-24">
+    <section
+      id="como-funciona"
+      ref={sectionRef}
+      className="bg-bg-dark py-24 overflow-hidden"
+    >
       <div className="max-w-site mx-auto px-5">
-        <motion.span
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+        <span
+          data-header
           className="font-mono text-[13px] tracking-[0.08em] uppercase text-accent mb-4 block"
         >
           Como funciona
-        </motion.span>
+        </span>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.42, ease: 'easeOut', delay: 0.05 }}
+        <h2
+          data-header
           className="font-display font-bold text-text-light text-[clamp(28px,4vw,44px)] leading-[1.05] mb-12"
         >
           Mais simples do que parece.
-        </motion.h2>
+        </h2>
 
         <div className="grid md:grid-cols-3 gap-10 relative">
-          {/* Connecting line — desktop only, animates from left */}
-          <motion.div
-            className="hidden md:block absolute top-[22px] left-[8%] right-[8%] h-[2px]"
+          {/* Connecting line — desktop only, desenhada pela timeline do GSAP */}
+          <div
+            ref={lineRef}
+            className="hidden md:block absolute top-[22px] left-[8%] right-[8%] h-[2px] origin-left"
             style={{
               background: 'linear-gradient(90deg, rgba(218,255,0,0.5) 0%, rgba(218,255,0,0.08) 100%)',
-              originX: 0,
+              transform: 'scaleX(0)',
             }}
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 }}
           />
 
           {STEPS.map((step, i) => (
-            <motion.div
+            <div
               key={step.num}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.48, ease: 'easeOut', delay: i * 0.12 + 0.1 }}
+              ref={(el) => {
+                stepRefs.current[i] = el
+              }}
               className="relative"
+              style={{ opacity: 0 }}
             >
-              {/* Step number circle — accent border on whileInView */}
-              <motion.div
-                initial={{ borderColor: '#333', backgroundColor: '#1A1A1A' }}
-                whileInView={{ borderColor: 'rgba(218,255,0,0.4)', backgroundColor: '#1A1A1A' }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.5, delay: i * 0.12 + 0.4 }}
-                className="w-11 h-11 rounded-full border flex items-center justify-center mb-5 relative z-10"
+              <div
+                ref={(el) => {
+                  circleRefs.current[i] = el
+                }}
+                className="w-11 h-11 rounded-full border flex items-center justify-center mb-5 relative z-10 bg-[#1A1A1A]"
+                style={{ borderColor: '#333' }}
               >
                 <span className="font-mono font-bold text-accent text-sm">{step.num}</span>
-              </motion.div>
+              </div>
               <h3 className="font-display font-bold text-text-light text-xl mb-2.5">
                 {step.title}
               </h3>
               <p className="text-muted text-[15px] leading-relaxed">{step.body}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
