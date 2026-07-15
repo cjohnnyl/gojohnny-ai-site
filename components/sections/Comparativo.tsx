@@ -69,7 +69,7 @@ export default function Comparativo() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
                   transition={{ duration: 0.38, ease: 'easeOut', delay: i * 0.06 }}
-                  className="border-b border-white/[0.07] hover:bg-[rgba(255,90,31,0.06)] transition-colors duration-200"
+                  className="border-b border-dashed border-white/[0.15] hover:bg-[rgba(255,90,31,0.06)] transition-colors duration-200"
                 >
                   <td className="px-[18px] py-4 text-text-light font-medium text-[14px]">
                     {row.attr}

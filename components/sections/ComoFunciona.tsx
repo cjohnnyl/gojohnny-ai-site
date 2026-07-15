@@ -158,7 +158,7 @@ export default function ComoFunciona() {
                 ref={(el) => {
                   circleRefs.current[i] = el
                 }}
-                className="w-11 h-11 rounded-full border flex items-center justify-center mb-5 relative z-10 bg-[#1A1A1A]"
+                className="w-11 h-11 rounded-[6px] border flex items-center justify-center mb-5 relative z-10 bg-[#1A1A1A]"
                 style={{ borderColor: '#333' }}
               >
                 <span className="font-mono font-bold text-accent text-sm">{step.num}</span>

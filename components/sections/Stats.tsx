@@ -44,7 +44,7 @@ function StatItem({ num, decimal = 0, suffix, label, isStatic, staticText, index
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.42, ease: 'easeOut', delay: index * 0.08 }}
-      className="text-center"
+      className="text-center border border-white/10 rounded-[4px] px-3 py-4"
     >
       <div className="font-display font-bold text-accent text-[clamp(32px,4vw,48px)] leading-tight">
         {display}
