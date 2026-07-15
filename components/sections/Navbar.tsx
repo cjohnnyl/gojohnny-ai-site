@@ -157,6 +157,15 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [mobileOpen])
 
+  // Garante que o scroll do body nunca fique travado, mesmo se o componente
+  // desmontar com o menu aberto (o gsap.context().revert() do useGSAP não
+  // reverte este side effect manual de DOM).
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
+
   useEffect(() => {
     if (!mobileOpen || !panelRef.current) return
     const focusable = panelRef.current.querySelectorAll<HTMLElement>('a, button')
@@ -192,7 +201,7 @@ export default function Navbar() {
 
       <header
         ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-50 py-5"
+        className={`fixed top-0 left-0 right-0 py-5 ${mobileOpen ? 'z-[56]' : 'z-50'}`}
         style={{ backgroundColor: 'rgba(13,13,13,0)' }}
       >
         <nav className="max-w-site mx-auto px-5 flex items-center justify-between relative">
