@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
+import Image from 'next/image'
+import HeroShowpiece from '@/components/three/HeroShowpiece'
 
 const HERO_WORDS = 'Seu coach de corrida está no WhatsApp.'.split(' ')
 const KINETIC_ITEMS = ['Com personalidade.', 'Sem app.', 'Sem humano.', 'Por R$39,90/mês.']
@@ -92,6 +94,16 @@ export default function Hero() {
       id="hero"
       className="bg-bg-dark min-h-screen flex items-center pt-[120px] pb-16 md:pb-24 relative"
     >
+      <Image
+        src="https://images.unsplash.com/photo-1581889470536-467bdbe30cd0"
+        alt="Corredor em asfalto urbano, luz de início de manhã"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center opacity-35"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-bg-dark" />
+
       <div className="max-w-site mx-auto px-5 w-full">
         <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
           {/* Text */}
@@ -155,14 +167,15 @@ export default function Hero() {
             </motion.a>
           </div>
 
-          {/* Mockup — right column, desktop only */}
+          {/* Mockup + showpiece 3D — right column, desktop only */}
           <motion.div
             ref={mockupRef}
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
-            className="hidden md:block"
+            className="hidden md:flex md:flex-col md:items-center md:gap-4"
           >
+            <HeroShowpiece />
             <WhatsAppMockup />
           </motion.div>
         </div>
