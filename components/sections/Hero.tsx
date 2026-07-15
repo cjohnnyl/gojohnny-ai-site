@@ -104,7 +104,7 @@ export default function Hero() {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-bg-dark" />
 
-      <div className="max-w-site mx-auto px-5 w-full">
+      <div className="max-w-site mx-auto px-5 w-full relative z-10">
         <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
           {/* Text */}
           <div>
