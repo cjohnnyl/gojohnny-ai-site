@@ -13,7 +13,7 @@ export default function TermosPage() {
       <div className="max-w-[800px] mx-auto px-5">
         <Link
           href="/"
-          className="inline-block text-[#DAFF00] text-sm font-mono mb-8 hover:underline"
+          className="inline-block text-[#FF5A1F] text-sm font-mono mb-8 hover:underline"
         >
           ← Voltar
         </Link>
@@ -36,7 +36,7 @@ export default function TermosPage() {
               Ao acessar o site do <strong className="text-[#F4F2EE]">GoJohnny AI</strong>, entrar
               na lista de espera ou utilizar qualquer funcionalidade do serviço, você declara que
               leu, compreendeu e concorda com estes Termos de Uso e com a nossa{' '}
-              <Link href="/privacidade" className="text-[#DAFF00] hover:underline">
+              <Link href="/privacidade" className="text-[#FF5A1F] hover:underline">
                 Política de Privacidade
               </Link>
               . Se não concordar, não utilize o serviço.
@@ -122,7 +122,7 @@ export default function TermosPage() {
             <ul className="list-disc pl-5 space-y-2">
               <li>Você autoriza o GoJohnny AI a entrar em contato via WhatsApp para informar sobre abertura de vagas e novidades do produto.</li>
               <li>O cadastro na lista de espera é gratuito e não implica nenhum compromisso de compra ou assinatura.</li>
-              <li>Você pode solicitar sua remoção da lista a qualquer momento enviando e-mail para <a href="mailto:privacidade@gojohnny.ai" className="text-[#DAFF00] hover:underline">privacidade@gojohnny.ai</a>.</li>
+              <li>Você pode solicitar sua remoção da lista a qualquer momento enviando e-mail para <a href="mailto:privacidade@gojohnny.ai" className="text-[#FF5A1F] hover:underline">privacidade@gojohnny.ai</a>.</li>
             </ul>
           </section>
 
@@ -261,7 +261,7 @@ export default function TermosPage() {
             <ul className="list-disc pl-5 space-y-1 mt-3">
               <li>
                 E-mail:{' '}
-                <a href="mailto:contato@gojohnny.ai" className="text-[#DAFF00] hover:underline">
+                <a href="mailto:contato@gojohnny.ai" className="text-[#FF5A1F] hover:underline">
                   contato@gojohnny.ai
                 </a>
               </li>
@@ -273,7 +273,7 @@ export default function TermosPage() {
         <div className="mt-12 pt-8 border-t border-[#1E1E1E] flex flex-col sm:flex-row gap-4">
           <Link
             href="/"
-            className="inline-block bg-[#DAFF00] text-[#0D0D0D] font-display font-bold text-sm px-6 py-3 rounded-lg hover:scale-[1.02] transition-transform text-center"
+            className="inline-block bg-[#FF5A1F] text-[#0D0D0D] font-display font-bold text-sm px-6 py-3 rounded-lg hover:scale-[1.02] transition-transform text-center"
           >
             Voltar para o início
           </Link>

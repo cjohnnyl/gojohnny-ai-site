@@ -13,7 +13,7 @@ export default function PrivacidadePage() {
       <div className="max-w-[800px] mx-auto px-5">
         <Link
           href="/"
-          className="inline-block text-[#DAFF00] text-sm font-mono mb-8 hover:underline"
+          className="inline-block text-[#FF5A1F] text-sm font-mono mb-8 hover:underline"
         >
           ← Voltar
         </Link>
@@ -41,7 +41,7 @@ export default function PrivacidadePage() {
             </p>
             <p className="mt-3">
               Contato do responsável pelo tratamento:{' '}
-              <a href="mailto:privacidade@gojohnny.ai" className="text-[#DAFF00] hover:underline">
+              <a href="mailto:privacidade@gojohnny.ai" className="text-[#FF5A1F] hover:underline">
                 privacidade@gojohnny.ai
               </a>
             </p>
@@ -231,7 +231,7 @@ export default function PrivacidadePage() {
             </ul>
             <p className="mt-3">
               Para exercer qualquer direito, envie e-mail para{' '}
-              <a href="mailto:privacidade@gojohnny.ai" className="text-[#DAFF00] hover:underline">
+              <a href="mailto:privacidade@gojohnny.ai" className="text-[#FF5A1F] hover:underline">
                 privacidade@gojohnny.ai
               </a>{' '}
               com o assunto &ldquo;Direitos LGPD&rdquo;. Responderemos em até 15 dias úteis.
@@ -302,7 +302,7 @@ export default function PrivacidadePage() {
                 E-mail:{' '}
                 <a
                   href="mailto:privacidade@gojohnny.ai"
-                  className="text-[#DAFF00] hover:underline"
+                  className="text-[#FF5A1F] hover:underline"
                 >
                   privacidade@gojohnny.ai
                 </a>
@@ -315,7 +315,7 @@ export default function PrivacidadePage() {
                 href="https://www.gov.br/anpd"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#DAFF00] hover:underline"
+                className="text-[#FF5A1F] hover:underline"
               >
                 www.gov.br/anpd
               </a>
@@ -328,7 +328,7 @@ export default function PrivacidadePage() {
         <div className="mt-12 pt-8 border-t border-[#1E1E1E] flex flex-col sm:flex-row gap-4">
           <Link
             href="/"
-            className="inline-block bg-[#DAFF00] text-[#0D0D0D] font-display font-bold text-sm px-6 py-3 rounded-lg hover:scale-[1.02] transition-transform text-center"
+            className="inline-block bg-[#FF5A1F] text-[#0D0D0D] font-display font-bold text-sm px-6 py-3 rounded-lg hover:scale-[1.02] transition-transform text-center"
           >
             Voltar para o início
           </Link>
