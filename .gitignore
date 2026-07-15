@@ -37,3 +37,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# superpowers scratch state (task ledger, not project artifacts)
+.superpowers/
