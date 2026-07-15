@@ -46,7 +46,7 @@ export default function Preco() {
                   <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
                     <path
                       d="M1 4L3.5 6.5L9 1"
-                      stroke="#DAFF00"
+                      stroke="#FF5A1F"
                       strokeWidth="1.8"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -62,8 +62,8 @@ export default function Preco() {
             href="#formulario"
             className="flex items-center justify-center gap-2 bg-accent text-text-dark font-display font-bold
               text-base px-7 py-4 rounded-[8px] no-underline w-full
-              shadow-[0_8px_24px_rgba(218,255,0,0.25)] hover:scale-[1.03]
-              hover:shadow-[0_12px_32px_rgba(218,255,0,0.4)]
+              shadow-[0_8px_24px_rgba(255,90,31,0.25)] hover:scale-[1.03]
+              hover:shadow-[0_12px_32px_rgba(255,90,31,0.4)]
               transition-[transform,box-shadow] duration-220
               focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[3px]"
           >

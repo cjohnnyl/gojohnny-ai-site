@@ -172,7 +172,7 @@ export default function ToneSelector() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="font-mono text-[13px] tracking-[0.08em] uppercase text-[#8a9c00] mb-4 block"
+          className="font-mono text-[13px] tracking-[0.08em] uppercase text-[#C2410C] mb-4 block"
         >
           O que nenhum concorrente faz
         </motion.span>
@@ -226,7 +226,7 @@ export default function ToneSelector() {
                   'flex items-center gap-3 text-left px-[18px] py-4 rounded-[10px] cursor-pointer border-2',
                   'transition-[border-color,background,transform,box-shadow] duration-200',
                   selected === i
-                    ? 'border-accent bg-[rgba(218,255,0,0.08)] shadow-[0_4px_16px_rgba(218,255,0,0.12)] translate-x-1'
+                    ? 'border-accent bg-[rgba(255,90,31,0.08)] shadow-[0_4px_16px_rgba(255,90,31,0.12)] translate-x-1'
                     : 'border-transparent bg-white hover:translate-x-1 hover:border-[#e0e0e0]',
                   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2',
                 ].join(' ')}

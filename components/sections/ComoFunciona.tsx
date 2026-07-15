@@ -77,7 +77,7 @@ export default function ComoFunciona() {
           ).fromTo(
             circleRefs.current[i],
             { borderColor: '#333' },
-            { borderColor: 'rgba(218,255,0,0.4)', duration: 0.4 },
+            { borderColor: 'rgba(255,90,31,0.4)', duration: 0.4 },
             '<'
           )
         })
@@ -93,7 +93,7 @@ export default function ComoFunciona() {
         gsap.set(lineRef.current, { scaleX: 1 })
 
         STEPS.forEach((_, i) => {
-          gsap.set(circleRefs.current[i], { borderColor: 'rgba(218,255,0,0.4)' })
+          gsap.set(circleRefs.current[i], { borderColor: 'rgba(255,90,31,0.4)' })
           gsap.from(stepRefs.current[i], {
             opacity: 0,
             y: 20,
@@ -140,7 +140,7 @@ export default function ComoFunciona() {
             ref={lineRef}
             className="hidden md:block absolute top-[22px] left-[8%] right-[8%] h-[2px] origin-left"
             style={{
-              background: 'linear-gradient(90deg, rgba(218,255,0,0.5) 0%, rgba(218,255,0,0.08) 100%)',
+              background: 'linear-gradient(90deg, rgba(255,90,31,0.5) 0%, rgba(255,90,31,0.08) 100%)',
               transform: 'scaleX(0)',
             }}
           />

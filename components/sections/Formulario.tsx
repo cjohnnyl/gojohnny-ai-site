@@ -120,7 +120,7 @@ export default function Formulario() {
         >
           {formState === 'success' ? (
             <div
-              className="text-center p-6 rounded-[10px] bg-[rgba(218,255,0,0.1)] text-accent text-[15px] leading-relaxed"
+              className="text-center p-6 rounded-[10px] bg-[rgba(255,90,31,0.1)] text-accent text-[15px] leading-relaxed"
               role="alert"
             >
               Você está na lista. Fique de olho no WhatsApp — quando abrir vaga, você é um dos
@@ -223,8 +223,8 @@ export default function Formulario() {
                 disabled={formState === 'loading'}
                 className="w-full flex items-center justify-center gap-2 bg-accent text-text-dark
                   font-display font-bold text-base px-7 py-4 rounded-[8px] mt-2
-                  shadow-[0_8px_24px_rgba(218,255,0,0.25)] hover:scale-[1.02]
-                  hover:shadow-[0_12px_32px_rgba(218,255,0,0.4)]
+                  shadow-[0_8px_24px_rgba(255,90,31,0.25)] hover:scale-[1.02]
+                  hover:shadow-[0_12px_32px_rgba(255,90,31,0.4)]
                   transition-[transform,box-shadow] duration-220 cursor-pointer
                   disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
               >

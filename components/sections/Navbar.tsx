@@ -136,8 +136,8 @@ export default function Navbar() {
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.26, ease: 'easeOut' }}
             className="fixed bottom-6 right-6 z-50 bg-accent text-text-dark font-display font-bold
-              text-[15px] px-6 py-4 rounded-lg shadow-[0_8px_24px_rgba(218,255,0,0.35)]
-              hover:shadow-[0_12px_32px_rgba(218,255,0,0.5)] hover:scale-[1.03]
+              text-[15px] px-6 py-4 rounded-lg shadow-[0_8px_24px_rgba(255,90,31,0.35)]
+              hover:shadow-[0_12px_32px_rgba(255,90,31,0.5)] hover:scale-[1.03]
               transition-[transform,box-shadow] duration-220 no-underline flex items-center gap-2"
             aria-label="Quero entrar na lista de espera"
           >

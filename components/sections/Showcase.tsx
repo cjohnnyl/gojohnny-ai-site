@@ -66,7 +66,7 @@ export default function Showcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="font-mono text-[13px] tracking-[0.08em] uppercase text-[#8a9c00] mb-4 block"
+              className="font-mono text-[13px] tracking-[0.08em] uppercase text-[#C2410C] mb-4 block"
             >
               Na prática
             </motion.span>

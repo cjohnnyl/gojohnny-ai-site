@@ -146,9 +146,9 @@ export default function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.7, duration: 0.46, ease: 'easeOut' }}
-              whileHover={{ scale: 1.03, boxShadow: '0 12px 32px rgba(218,255,0,0.4)' }}
+              whileHover={{ scale: 1.03, boxShadow: '0 12px 32px rgba(255,90,31,0.4)' }}
               className="inline-flex items-center gap-2 bg-accent text-text-dark font-display font-bold
-                text-base px-7 py-4 rounded-[8px] no-underline shadow-[0_8px_24px_rgba(218,255,0,0.25)]
+                text-base px-7 py-4 rounded-[8px] no-underline shadow-[0_8px_24px_rgba(255,90,31,0.25)]
                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[3px]"
             >
               Quero entrar na lista de espera

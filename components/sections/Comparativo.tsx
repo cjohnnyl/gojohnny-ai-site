@@ -69,7 +69,7 @@ export default function Comparativo() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.5 }}
                   transition={{ duration: 0.38, ease: 'easeOut', delay: i * 0.06 }}
-                  className="border-b border-white/[0.07] hover:bg-[rgba(218,255,0,0.06)] transition-colors duration-200"
+                  className="border-b border-white/[0.07] hover:bg-[rgba(255,90,31,0.06)] transition-colors duration-200"
                 >
                   <td className="px-[18px] py-4 text-text-light font-medium text-[14px]">
                     {row.attr}
@@ -103,8 +103,8 @@ export default function Comparativo() {
           <a
             href="#formulario"
             className="inline-flex items-center gap-2 bg-accent text-text-dark font-display font-bold
-              text-base px-7 py-4 rounded-[8px] no-underline shadow-[0_8px_24px_rgba(218,255,0,0.25)]
-              hover:scale-[1.03] hover:shadow-[0_12px_32px_rgba(218,255,0,0.4)]
+              text-base px-7 py-4 rounded-[8px] no-underline shadow-[0_8px_24px_rgba(255,90,31,0.25)]
+              hover:scale-[1.03] hover:shadow-[0_12px_32px_rgba(255,90,31,0.4)]
               transition-[transform,box-shadow] duration-220
               focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[3px]"
           >

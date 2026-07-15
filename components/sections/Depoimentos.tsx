@@ -27,7 +27,7 @@ function StarRow() {
   return (
     <div className="flex gap-0.5 mb-4" aria-label="5 estrelas">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} width="14" height="14" viewBox="0 0 14 14" fill="#DAFF00" aria-hidden="true">
+        <svg key={i} width="14" height="14" viewBox="0 0 14 14" fill="#FF5A1F" aria-hidden="true">
           <path d="M7 1l1.545 3.13L12 4.635l-2.5 2.435.59 3.44L7 8.77l-3.09 1.74.59-3.44L2 4.635l3.455-.505L7 1z" />
         </svg>
       ))}
