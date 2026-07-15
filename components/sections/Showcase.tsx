@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const BULLETS = [
   'Plano semanal personalizado toda segunda',
@@ -58,7 +59,7 @@ export default function Showcase() {
   return (
     <section id="showcase" className="bg-bg-light py-24">
       <div className="max-w-site mx-auto px-5">
-        <div className="grid md:grid-cols-[0.9fr_1.1fr] gap-14 items-center">
+        <div className="grid md:grid-cols-[0.8fr_0.7fr_1fr] gap-10 items-center">
           {/* Text side */}
           <div>
             <motion.span
@@ -109,6 +110,23 @@ export default function Showcase() {
               ))}
             </ul>
           </div>
+
+          {/* Photo side */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.46, ease: 'easeOut', delay: 0.1 }}
+            className="hidden md:block relative rounded-2xl overflow-hidden aspect-[3/4]"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1480179087180-d9f0ec044897"
+              alt="Corredora consultando o celular durante o treino"
+              fill
+              sizes="(min-width: 768px) 25vw, 100vw"
+              className="object-cover"
+            />
+          </motion.div>
 
           {/* Mockup side */}
           <motion.div
