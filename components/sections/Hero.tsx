@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import Image from 'next/image'
-import HeroShowpiece from '@/components/three/HeroShowpiece'
 
 const HERO_WORDS = 'Seu coach de corrida está no WhatsApp.'.split(' ')
 const KINETIC_ITEMS = ['Com personalidade.', 'Sem app.', 'Sem humano.', 'Por R$39,90/mês.']
@@ -167,7 +166,7 @@ export default function Hero() {
             </motion.a>
           </div>
 
-          {/* Mockup + showpiece 3D — right column, desktop only */}
+          {/* Mockup — right column, desktop only */}
           <motion.div
             ref={mockupRef}
             initial={{ opacity: 0, x: 32 }}
@@ -175,7 +174,6 @@ export default function Hero() {
             transition={{ delay: 0.6, duration: 0.6, ease: 'easeOut' }}
             className="hidden md:flex md:flex-col md:items-center md:gap-4"
           >
-            <HeroShowpiece />
             <WhatsAppMockup />
           </motion.div>
         </div>
